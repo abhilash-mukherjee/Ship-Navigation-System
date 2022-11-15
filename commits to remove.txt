@@ -1,0 +1,6 @@
+Library/ArtifactDB
+Library/Artifacts/8a/8a40159f133281bda4a23ff71c91b699 
+Library/Artifacts/8a/8a40159f133281bda4a23ff71c91b699 
+Library/PackageCache/com.unity.burst@1.7.3/.Runtime/hostmac/lld 
+Library/PackageCache/com.unity.burst@1.7.3/.Runtime/libburst-llvm-12.dylib 
+Assets/Meshes/Shipyard_Harbor.FBX
