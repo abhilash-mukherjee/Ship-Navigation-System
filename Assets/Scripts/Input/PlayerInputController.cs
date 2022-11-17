@@ -10,7 +10,7 @@ public class PlayerInputController : MonoBehaviour
     private InputAction linearMovementAction, steerMovementAction;
     [SerializeField] private SteerInput steerInput;
     [SerializeField] private LinearInput linearInput;
-    [SerializeField] GameEvent hornPressed, dockPressed, viewToggled, parkingAreaSelected;
+    [SerializeField] GameEvent hornPressed, dockPressed, viewToggled, sailorSidePanelToggled;
     private InputAction shipInput;
     private void Awake()
     {
@@ -25,11 +25,11 @@ public class PlayerInputController : MonoBehaviour
         shipInputActions.Ship.Horn.performed += OnHornPressed;
         shipInputActions.Ship.Dock.performed += OnDockPressed;
         shipInputActions.Ship.ToggleView.performed += OnViewToggled;
-        shipInputActions.Ship.SelectParkingArea.performed += OnParkingAreaSelected;
+        shipInputActions.Ship.TooglePanel.performed += OnPanelToggled;
         shipInputActions.Ship.Horn.Enable();
         shipInputActions.Ship.Dock.Enable();
         shipInputActions.Ship.ToggleView.Enable();
-        shipInputActions.Ship.SelectParkingArea.Enable();
+        shipInputActions.Ship.TooglePanel.Enable();
     }
 
     private void OnHornPressed(InputAction.CallbackContext obj)
@@ -48,10 +48,10 @@ public class PlayerInputController : MonoBehaviour
         Debug.Log("View toggled");
         viewToggled.Raise();
     }
-    private void OnParkingAreaSelected(InputAction.CallbackContext obj)
+    private void OnPanelToggled(InputAction.CallbackContext obj)
     {
         Debug.Log("parkingAreaSelected");
-        parkingAreaSelected.Raise();
+        sailorSidePanelToggled.Raise();
     }
 
     private void OnDisable()
@@ -61,11 +61,11 @@ public class PlayerInputController : MonoBehaviour
         shipInputActions.Ship.Horn.performed -= OnHornPressed;
         shipInputActions.Ship.Dock.performed -= OnDockPressed;
         shipInputActions.Ship.ToggleView.performed -= OnViewToggled;
-        shipInputActions.Ship.SelectParkingArea.performed -= OnParkingAreaSelected;
+        shipInputActions.Ship.TooglePanel.performed -= OnPanelToggled;
         shipInputActions.Ship.Horn.Disable();
         shipInputActions.Ship.Dock.Disable();
         shipInputActions.Ship.ToggleView.Disable();
-        shipInputActions.Ship.SelectParkingArea.Disable();
+        shipInputActions.Ship.TooglePanel.Disable();
     }
     private void FixedUpdate()
     {

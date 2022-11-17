@@ -73,7 +73,7 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""SelectParkingArea"",
+                    ""name"": ""TooglePanel"",
                     ""type"": ""Button"",
                     ""id"": ""8cc54b31-b5db-49b9-aeae-9076fa303019"",
                     ""expectedControlType"": ""Button"",
@@ -310,7 +310,7 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""SelectParkingArea"",
+                    ""action"": ""TooglePanel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -321,7 +321,7 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""SelectParkingArea"",
+                    ""action"": ""TooglePanel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -337,7 +337,7 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
         m_Ship_Horn = m_Ship.FindAction("Horn", throwIfNotFound: true);
         m_Ship_Dock = m_Ship.FindAction("Dock", throwIfNotFound: true);
         m_Ship_ToggleView = m_Ship.FindAction("ToggleView", throwIfNotFound: true);
-        m_Ship_SelectParkingArea = m_Ship.FindAction("SelectParkingArea", throwIfNotFound: true);
+        m_Ship_TooglePanel = m_Ship.FindAction("TooglePanel", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -402,7 +402,7 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
     private readonly InputAction m_Ship_Horn;
     private readonly InputAction m_Ship_Dock;
     private readonly InputAction m_Ship_ToggleView;
-    private readonly InputAction m_Ship_SelectParkingArea;
+    private readonly InputAction m_Ship_TooglePanel;
     public struct ShipActions
     {
         private @ShipInputActionMappings m_Wrapper;
@@ -412,7 +412,7 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
         public InputAction @Horn => m_Wrapper.m_Ship_Horn;
         public InputAction @Dock => m_Wrapper.m_Ship_Dock;
         public InputAction @ToggleView => m_Wrapper.m_Ship_ToggleView;
-        public InputAction @SelectParkingArea => m_Wrapper.m_Ship_SelectParkingArea;
+        public InputAction @TooglePanel => m_Wrapper.m_Ship_TooglePanel;
         public InputActionMap Get() { return m_Wrapper.m_Ship; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -437,9 +437,9 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                 @ToggleView.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleView;
                 @ToggleView.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleView;
                 @ToggleView.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleView;
-                @SelectParkingArea.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnSelectParkingArea;
-                @SelectParkingArea.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnSelectParkingArea;
-                @SelectParkingArea.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnSelectParkingArea;
+                @TooglePanel.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnTooglePanel;
+                @TooglePanel.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnTooglePanel;
+                @TooglePanel.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnTooglePanel;
             }
             m_Wrapper.m_ShipActionsCallbackInterface = instance;
             if (instance != null)
@@ -459,9 +459,9 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                 @ToggleView.started += instance.OnToggleView;
                 @ToggleView.performed += instance.OnToggleView;
                 @ToggleView.canceled += instance.OnToggleView;
-                @SelectParkingArea.started += instance.OnSelectParkingArea;
-                @SelectParkingArea.performed += instance.OnSelectParkingArea;
-                @SelectParkingArea.canceled += instance.OnSelectParkingArea;
+                @TooglePanel.started += instance.OnTooglePanel;
+                @TooglePanel.performed += instance.OnTooglePanel;
+                @TooglePanel.canceled += instance.OnTooglePanel;
             }
         }
     }
@@ -473,6 +473,6 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
         void OnHorn(InputAction.CallbackContext context);
         void OnDock(InputAction.CallbackContext context);
         void OnToggleView(InputAction.CallbackContext context);
-        void OnSelectParkingArea(InputAction.CallbackContext context);
+        void OnTooglePanel(InputAction.CallbackContext context);
     }
 }
