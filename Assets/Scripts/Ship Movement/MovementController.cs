@@ -49,7 +49,7 @@ public class MovementController : MonoBehaviour
         Rigidbody.angularDrag = steerInput.Value == 0 ? nonSteerAngularDrag : steerAngularDrag;
         //Rotational Force
         
-        var rotForce = -steerInput.Value * transform.right * SteerPower / 100f ;
+        var rotForce = steerInput.Value * transform.right * SteerPower / 100f ;
         rotForce.y = 0f;
         Rigidbody.AddForceAtPosition(rotForce, Motor.position);
 
