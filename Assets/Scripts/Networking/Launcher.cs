@@ -30,10 +30,7 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
         /// </summary>
         string gameVersion = "1";
         bool isConnecting;
-        private const string OPERATOR_EXIST = "OE";
-        private const string SAILOR_EXISTS = "PE";
         private const string MAP_TYPE = "MAP_TYPE";
-        private bool isMasterConnected = false;
 
 
         #endregion
@@ -96,7 +93,6 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
         public override void OnConnectedToMaster()
         {
-            isMasterConnected = true;
             Debug.Log("Master is connected");
             joinLobby();
 
@@ -110,7 +106,6 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
         public override void OnDisconnected(DisconnectCause cause)
         {
-            isMasterConnected = false;
             Debug.LogWarningFormat("PUN Basics Tutorial/Launcher: OnDisconnected() was called by PUN with reason {0}", cause);
             OnConnectionLost?.Invoke();
 
@@ -126,7 +121,7 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
         public override void OnJoinedRoom()
         {
             bool isOperatorView = ClientSideData.Instance.View == Operator;
-            ExitGames.Client.Photon.Hashtable playerProperties = new ExitGames.Client.Photon.Hashtable() { { "CurrentView", (isOperatorView ? "OPERATOR" : "SAILOR") } };
+           Hashtable playerProperties = new Hashtable() { { "CurrentView", (isOperatorView ? "OPERATOR" : "SAILOR") } };
             PhotonNetwork.LocalPlayer.SetCustomProperties(playerProperties);
             PhotonNetwork.LoadLevel("Room for 1");
 
@@ -154,10 +149,10 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
         private void CreateRoom()
         {
             RoomOptions roomOptions = new RoomOptions();
-            string[] keys = { MAP_TYPE };
+            string[] keys = { "CurrentView" };
             roomOptions.CustomRoomPropertiesForLobby = keys;
             bool isOperatorView = ClientSideData.Instance.View == Operator;
-            roomOptions.CustomRoomProperties = new Hashtable { { MAP_TYPE, isOperatorView ? "OPERATOR" : "SAILOR" } };
+            roomOptions.CustomRoomProperties = new Hashtable { { "CurrentView", isOperatorView ? "OPERATOR" : "SAILOR" } };
             Debug.Log("Creating room for " + (isOperatorView ? "OPERATOR" : "SAILOR"));
             PhotonNetwork.CreateRoom(null, roomOptions);
         }
@@ -166,13 +161,12 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
         {
             bool isOperatorView = ClientSideData.Instance.View == Operator;
             Debug.Log("Is operator view = " + isOperatorView);
-            Hashtable expectedCustomRoomProperties = new Hashtable { { MAP_TYPE, isOperatorView ? "SAILOR" : "OPERATOR" } };
-            Debug.Log("Checking room for " + (isOperatorView ? "SAILOR" : "OPERATOR"));
+            Hashtable expectedCustomRoomProperties = new Hashtable { { "CurrentView", isOperatorView ? "SAILOR" : "OPERATOR" } };
+            Debug.Log("Checking room containing " + (isOperatorView ? "SAILOR" : "OPERATOR"));
             PhotonNetwork.JoinRandomRoom(expectedCustomRoomProperties, 0);
         }
         private void LeaveRoom()
         {
-            isMasterConnected = false;
             PhotonNetwork.LeaveRoom();
         }
         #endregion
