@@ -178,6 +178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distanceCorrection: 35
+  cosAngleCorrectionFactor: 0.7
 --- !u!54 &5894550239132897969
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PathMarker : MonoBehaviour
 {
-    [SerializeField] private float distanceCorrection = -24f;
+    [SerializeField] private float distanceCorrection = -24f, cosAngleCorrectionFactor = 0.5f;
     protected ShipPathManager m_pathManager;
     private Transform m_parkingArea;
     public ShipPathManager PathManager
@@ -24,7 +24,10 @@ public class PathMarker : MonoBehaviour
     void Update()
     {
         var dir = m_parkingArea.position - transform.position;
-        if (GetDistanceAlongDirection(transform.position,m_pathManager.transform.position,dir) < distanceCorrection)
+        if (GetDistanceAlongDirection(transform.position, m_pathManager.transform.position, dir) < distanceCorrection
+            &&
+            Vector3.Dot((m_parkingArea.position - transform.position).normalized, (m_parkingArea.position - m_pathManager.transform.position).normalized) > cosAngleCorrectionFactor
+            )
         {
             OnShipHitMarker();
 
@@ -50,7 +53,6 @@ public class PathMarker : MonoBehaviour
 
     protected virtual void OnShipHitMarker()
     {
-        Debug.Log("trigger entered");
         PathManager.OnNewMarkerReached();
         Destroy(gameObject);
     }

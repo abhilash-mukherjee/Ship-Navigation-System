@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class MapUI : MonoBehaviour
+public  class MapUI : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D other)
     {
