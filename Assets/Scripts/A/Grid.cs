@@ -4,8 +4,10 @@ using System.Collections.Generic;
 
 public class Grid : MonoBehaviour
 {
-	
+	public delegate void GridUpdateHandler(List<Vector3> vertexList);
+	public static GridUpdateHandler OnGridUpdated;
 	[SerializeField] private CustomPathFinding pathFinder;
+	[SerializeField] private GameObject glow;
 	public LayerMask unwalkableMask;
 	public Vector2 gridWorldSize;
 	public float nodeRadius;
@@ -20,12 +22,26 @@ public class Grid : MonoBehaviour
 		gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
 		gridSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);
 	}
-
-	public void UpdateGrid()
+    private void OnEnable()
     {
-		StartCoroutine(CreateGrid());
+		ShipPathManager.OnPathRequestSent += UpdateGrid; 
     }
-	IEnumerator CreateGrid()
+	private void OnDisable()
+    {
+		ShipPathManager.OnPathRequestSent -= UpdateGrid; 
+    }
+    public void UpdateGrid(Vector3 start, Vector3 target)
+    {
+		StartCoroutine(CreateGrid(start,target));
+		var vertexList = new List<Vector3>();
+		for(int i = 0; i <path.Count;i++)
+        {
+			vertexList.Add(path[i].worldPosition);
+			//Instantiate(glow, vertexList[i], Quaternion.identity);
+        }
+		OnGridUpdated?.Invoke(vertexList);
+    }
+	IEnumerator CreateGrid(Vector3 start, Vector3 target)
 	{
 		grid = new Node[gridSizeX, gridSizeY];
 		Vector3 worldBottomLeft = transform.position - Vector3.right * gridWorldSize.x / 2 - Vector3.forward * gridWorldSize.y / 2;
@@ -39,7 +55,7 @@ public class Grid : MonoBehaviour
 				grid[x, y] = new Node(walkable, worldPoint, x, y);
 			}
 		}
-		pathFinder.UpdatePath();
+		pathFinder.UpdatePath(start, target);
 		yield return null;
 	}
 

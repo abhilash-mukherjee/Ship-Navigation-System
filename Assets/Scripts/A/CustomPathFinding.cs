@@ -13,9 +13,9 @@ public class CustomPathFinding : MonoBehaviour
 		grid = GetComponent<Grid>();
 	}
 
-    public void UpdatePath()
+    public void UpdatePath(Vector3 start, Vector3 target)
     {
-        StartCoroutine( FindPath(seeker.position, target.position));
+        StartCoroutine( FindPath(start,target));
     }
 
     IEnumerator FindPath(Vector3 startPos, Vector3 targetPos)

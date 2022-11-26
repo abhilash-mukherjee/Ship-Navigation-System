@@ -9,6 +9,8 @@ public class ShipPathManager : MonoBehaviour
 {
     public delegate void TargetParkingUpdateHandler(ShipPathManager pathManager, Transform targetParkingTransform);
     public static event TargetParkingUpdateHandler OnTargetParkingAreaUpdated;
+    public delegate void PathUpdateRequestHandler(Vector3 start, Vector3 target);
+    public static event PathUpdateRequestHandler OnPathRequestSent;
 
     [SerializeField]
     private PathMarker pathMarker;
@@ -37,10 +39,20 @@ public class ShipPathManager : MonoBehaviour
     private void OnEnable()
     {
         ParkingAreaSelector.OnAreaSelected += OnPathUpdated;
+        Grid.OnGridUpdated += StartSpawning;
     }
     private void OnDisable()
     {
         ParkingAreaSelector.OnAreaSelected -= OnPathUpdated;
+        Grid.OnGridUpdated -= StartSpawning;
+    }
+
+
+    private void StartSpawning(List<Vector3> vertexList)
+    {
+        var path = new TargetPath(vertexList.ToArray());
+        UpdateTargetPath(path);
+        OnTargetParkingAreaUpdated?.Invoke(this, m_currentParkingArea);
     }
 
     public void OnPathUpdated(ElementID parkingAreaID)
@@ -55,14 +67,13 @@ public class ShipPathManager : MonoBehaviour
         if (m_cachedGameObject == null) m_cachedGameObject = Instantiate(new GameObject());
         var pathElement = paths.Find(p => p.parkingAreaID == parkingAreaID);
         m_currentParkingArea = pathElement.parkingAreaTransform;
-        var vertices = new List<Vector3>();
-        vertices.Add(transform.position);
-        var otherVertices = GetPathVertices(transform.position, pathElement.parkingAreaTransform.position).ToList();
-        for(int i = 0; i <  otherVertices.Count; i++) vertices.Add(otherVertices[i]);
-        PrintList(vertices);
-        var path = new TargetPath(vertices.ToArray());
-        UpdateTargetPath(path);
-        OnTargetParkingAreaUpdated?.Invoke(this,m_currentParkingArea);
+        //var vertices = new List<Vector3>();
+        //vertices.Add(transform.position);
+        //var otherVertices = GetPathVertices(transform.position, pathElement.parkingAreaTransform.position).ToList();
+        //for(int i = 0; i <  otherVertices.Count; i++) vertices.Add(otherVertices[i]);
+        //PrintList(vertices);
+        OnPathRequestSent?.Invoke(transform.position, m_currentParkingArea.position);
+        
         yield return null;
     }
 
@@ -75,59 +86,60 @@ public class ShipPathManager : MonoBehaviour
         }
         Debug.Log(str);
     }
-    private Vector3[] GetPathVertices(Vector3 start, Vector3 end)
-    {
-        List<Vector3> vertexList = new List<Vector3>();
-        var obstacle = Obstacle.LookForObstacles(start, end, (start - end).normalized, shipRadius);
-        // Cast character controller shape 10 meters forward to see if it is about to hit anything.
-        if (obstacle != null)
-        {
-            Debug.Log("found obstacles");
-            var distanceToObstacle = obstacle.GetObstacleDistance(start);
-            Vector3 forward = (end - start).normalized;
-            forward.y = 0;
-            Vector3 currentForward = forward;
-            var ang = Vector3.SignedAngle(transform.forward, (end - start).normalized, Vector3.up);
-            Vector3 currentEnd = end;
-            int randomDir = UnityEngine.Random.Range(0,2);
-            var radians = (obstacle.CollisionRadius+ shipRadius) / distanceToObstacle;
-            var thetaDegrees = (180 / 3.14f) * radians;
-            randomDir = randomDir == 0 ? -1 : 1;
-            for(int i = 1; i <= maximumPathFindingTries/2; i++)
-            {
-                currentForward = Quaternion.AngleAxis(i * thetaDegrees *randomDir , transform.up) * forward;
-                currentEnd = start + currentForward * distanceToObstacle;
-                var new_obstacle = Obstacle.LookForObstacles(start, currentEnd, currentForward, shipRadius);
-                if (!new_obstacle)
-                {
-                    var new_start = currentEnd;
-                    vertexList.Add(new_start);
-                    return vertexList.Concat(GetPathVertices(new_start, end).ToList()).ToArray();
-                }
-                randomDir *= -1;
-                currentForward = Quaternion.AngleAxis(i * randomDir* thetaDegrees, transform.up) * forward;
-                currentEnd = start + currentForward * distanceToObstacle;
-                new_obstacle = Obstacle.LookForObstacles(start, currentEnd, currentForward, shipRadius);
-                if (!new_obstacle)
-                {
-                    var new_start = currentEnd;
-                    vertexList.Add(new_start);
-                    return vertexList.Concat(GetPathVertices(new_start, end).ToList()).ToArray();
-                }
+
+    //private Vector3[] GetPathVertices(Vector3 start, Vector3 end)
+    //{
+    //    List<Vector3> vertexList = new List<Vector3>();
+    //    var obstacle = Obstacle.LookForObstacles(start, end, (start - end).normalized, shipRadius);
+    //    // Cast character controller shape 10 meters forward to see if it is about to hit anything.
+    //    if (obstacle != null)
+    //    {
+    //        Debug.Log("found obstacles");
+    //        var distanceToObstacle = obstacle.GetObstacleDistance(start);
+    //        Vector3 forward = (end - start).normalized;
+    //        forward.y = 0;
+    //        Vector3 currentForward = forward;
+    //        var ang = Vector3.SignedAngle(transform.forward, (end - start).normalized, Vector3.up);
+    //        Vector3 currentEnd = end;
+    //        int randomDir = UnityEngine.Random.Range(0,2);
+    //        var radians = (obstacle.CollisionRadius+ shipRadius) / distanceToObstacle;
+    //        var thetaDegrees = (180 / 3.14f) * radians;
+    //        randomDir = randomDir == 0 ? -1 : 1;
+    //        for(int i = 1; i <= maximumPathFindingTries/2; i++)
+    //        {
+    //            currentForward = Quaternion.AngleAxis(i * thetaDegrees *randomDir , transform.up) * forward;
+    //            currentEnd = start + currentForward * distanceToObstacle;
+    //            var new_obstacle = Obstacle.LookForObstacles(start, currentEnd, currentForward, shipRadius);
+    //            if (!new_obstacle)
+    //            {
+    //                var new_start = currentEnd;
+    //                vertexList.Add(new_start);
+    //                return vertexList.Concat(GetPathVertices(new_start, end).ToList()).ToArray();
+    //            }
+    //            randomDir *= -1;
+    //            currentForward = Quaternion.AngleAxis(i * randomDir* thetaDegrees, transform.up) * forward;
+    //            currentEnd = start + currentForward * distanceToObstacle;
+    //            new_obstacle = Obstacle.LookForObstacles(start, currentEnd, currentForward, shipRadius);
+    //            if (!new_obstacle)
+    //            {
+    //                var new_start = currentEnd;
+    //                vertexList.Add(new_start);
+    //                return vertexList.Concat(GetPathVertices(new_start, end).ToList()).ToArray();
+    //            }
 
 
-            }
+    //        }
             
-            Debug.LogError("Couldn't find path");
-            vertexList.Add(currentEnd);
-            return vertexList.Concat(GetPathVertices(currentEnd, end).ToList()).ToArray();
-        }
-        else
-        {
-            vertexList.Add(end);
-        }
-        return vertexList.ToArray();
-    }
+    //        Debug.LogError("Couldn't find path");
+    //        vertexList.Add(currentEnd);
+    //        return vertexList.Concat(GetPathVertices(currentEnd, end).ToList()).ToArray();
+    //    }
+    //    else
+    //    {
+    //        vertexList.Add(end);
+    //    }
+    //    return vertexList.ToArray();
+    //}
 
     
 
