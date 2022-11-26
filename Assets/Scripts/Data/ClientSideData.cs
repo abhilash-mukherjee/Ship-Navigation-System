@@ -5,9 +5,11 @@ using UnityEngine;
 public class ClientSideData : MonoBehaviour
 {
     [SerializeField] private string initialView;
+    
     private string m_view;
     public static ClientSideData Instance;
     public string View { get => m_view; set => m_view = value; }
+    public int ParkingAreaIndex { get; set; }
 
     private void Awake()
     {

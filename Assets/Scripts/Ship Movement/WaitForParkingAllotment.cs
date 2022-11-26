@@ -34,7 +34,8 @@ public class WaitForParkingAllotment : MonoBehaviour
     IEnumerator AllotParkingArea(float time)
     {
         yield return new WaitForSeconds(time);
-        var index = Random.Range(0, parkingIDs.Count);
+        var index = ClientSideData.Instance.ParkingAreaIndex >= 3 ? 0 : ClientSideData.Instance.ParkingAreaIndex + 1;
+        ClientSideData.Instance.ParkingAreaIndex = index;
         OnParkingAreaSelected?.Invoke(parkingIDs[index]);
         OnParkingAreaAlloted();
         m_isPathAllotted = true;
