@@ -13,12 +13,12 @@ public class CustomPathFinding : MonoBehaviour
 		grid = GetComponent<Grid>();
 	}
 
-	void Update()
-	{
-		FindPath(seeker.position, target.position);
-	}
+    public void UpdatePath()
+    {
+        StartCoroutine( FindPath(seeker.position, target.position));
+    }
 
-	void FindPath(Vector3 startPos, Vector3 targetPos)
+    IEnumerator FindPath(Vector3 startPos, Vector3 targetPos)
 	{
 		Node startNode = grid.NodeFromWorldPoint(startPos);
 		Node targetNode = grid.NodeFromWorldPoint(targetPos);
@@ -45,7 +45,7 @@ public class CustomPathFinding : MonoBehaviour
 			if (node == targetNode)
 			{
 				RetracePath(startNode, targetNode);
-				return;
+				yield return null;
 			}
 
 			foreach (Node neighbour in grid.GetNeighbours(node))
@@ -67,6 +67,7 @@ public class CustomPathFinding : MonoBehaviour
 				}
 			}
 		}
+		yield return null;
 	}
 
 	void RetracePath(Node startNode, Node endNode)

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class Grid : MonoBehaviour
 {
+	
+	[SerializeField] private CustomPathFinding pathFinder;
 	public LayerMask unwalkableMask;
 	public Vector2 gridWorldSize;
 	public float nodeRadius;
@@ -17,10 +19,13 @@ public class Grid : MonoBehaviour
 		nodeDiameter = nodeRadius * 2;
 		gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
 		gridSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);
-		CreateGrid();
 	}
 
-	void CreateGrid()
+	public void UpdateGrid()
+    {
+		StartCoroutine(CreateGrid());
+    }
+	IEnumerator CreateGrid()
 	{
 		grid = new Node[gridSizeX, gridSizeY];
 		Vector3 worldBottomLeft = transform.position - Vector3.right * gridWorldSize.x / 2 - Vector3.forward * gridWorldSize.y / 2;
@@ -34,6 +39,8 @@ public class Grid : MonoBehaviour
 				grid[x, y] = new Node(walkable, worldPoint, x, y);
 			}
 		}
+		pathFinder.UpdatePath();
+		yield return null;
 	}
 
 	public List<Node> GetNeighbours(Node node)
@@ -74,22 +81,22 @@ public class Grid : MonoBehaviour
 	}
 
 	public List<Node> path;
-	void OnDrawGizmos()
-	{
-		Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
+	//void OnDrawGizmos()
+	//{
+	//	Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
 
-		if (grid != null)
-		{
-			foreach (Node n in grid)
-			{
-				Gizmos.color = (n.walkable) ? Color.white : Color.red;
-				if (path != null)
-					if (path.Contains(n))
-						Gizmos.color = Color.black;
-				Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter - .1f));
-			}
-		}
-	}
+	//	if (grid != null)
+	//	{
+	//		foreach (Node n in grid)
+	//		{
+	//			Gizmos.color = (n.walkable) ? Color.white : Color.red;
+	//			if (path != null)
+	//				if (path.Contains(n))
+	//					Gizmos.color = Color.black;
+	//			Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter - .1f));
+	//		}
+	//	}
+	//}
 }
 
 public class Node
