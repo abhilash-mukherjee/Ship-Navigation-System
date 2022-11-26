@@ -17,9 +17,9 @@ public class ShipPathManager : MonoBehaviour
     [SerializeField]
     private GameEvent OnMilestoneUpdated;
 
-    [SerializeField] 
+    [SerializeField]
     private float markerGap;
-    [SerializeField] private float  yOffset = 5f;
+    [SerializeField] private float yOffset = 5f;
     [SerializeField] private GameObject driverSeat;
     [SerializeField] private List<ParkingToPath> paths;
     [SerializeField] private LayerMask parkingAreaLayerMask;
@@ -27,7 +27,8 @@ public class ShipPathManager : MonoBehaviour
     [SerializeField] private int maximumPathFindingTries;
     public Queue<PathMarker> pathMarkers;
     public List<PathMarker> pathMarkerList;
-
+    public ElementID m_currentParkingAreaID;
+    public ElementID CurrentParkingArea{ get => m_currentParkingAreaID; }
     public Vector3 NextMileStone { get => m_nextMileStone; }
     public GameObject DriverSeat { get => driverSeat; }
 
@@ -39,11 +40,13 @@ public class ShipPathManager : MonoBehaviour
     private void OnEnable()
     {
         ParkingAreaSelector.OnAreaSelected += OnPathUpdated;
+        WaitForParkingAllotment.OnParkingAreaSelected += OnPathUpdated;
         Grid.OnGridUpdated += StartSpawning;
     }
     private void OnDisable()
     {
         ParkingAreaSelector.OnAreaSelected -= OnPathUpdated;
+        WaitForParkingAllotment.OnParkingAreaSelected -= OnPathUpdated;
         Grid.OnGridUpdated -= StartSpawning;
     }
 
@@ -57,8 +60,8 @@ public class ShipPathManager : MonoBehaviour
 
     public void OnPathUpdated(ElementID parkingAreaID)
     {
-
         StartCoroutine(PathUpdated(parkingAreaID));
+        m_currentParkingAreaID = parkingAreaID;
     }
 
     IEnumerator PathUpdated(ElementID parkingAreaID)

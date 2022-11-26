@@ -11,6 +11,7 @@ public class ParkingUI : MonoBehaviour
     private void OnEnable()
     {
         ParkingAreaSelector.OnAreaSelected += AddGlow;
+        WaitForParkingAllotment.OnParkingAreaSelected += AddGlow;
         active.SetActive(false);
         inActive.SetActive(true);
     }
@@ -33,6 +34,7 @@ public class ParkingUI : MonoBehaviour
     private void OnDisable()
     {
         ParkingAreaSelector.OnAreaSelected -= AddGlow;
+        WaitForParkingAllotment.OnParkingAreaSelected -= AddGlow;
         
     }
 }

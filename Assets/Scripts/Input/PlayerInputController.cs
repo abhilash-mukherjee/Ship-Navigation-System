@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerInputController : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class PlayerInputController : MonoBehaviour
     private InputAction linearMovementAction, steerMovementAction;
     [SerializeField] private SteerInput steerInput;
     [SerializeField] private LinearInput linearInput;
-    [SerializeField] GameEvent hornPressed, dockPressed, viewToggled, sailorSidePanelToggled;
+    [SerializeField] GameEvent hornPressed, dockPressed, viewToggled, sailorSidePanelToggled, requestParkingArea;
     private InputAction shipInput;
     private void Awake()
     {
@@ -25,11 +26,13 @@ public class PlayerInputController : MonoBehaviour
         shipInputActions.Ship.Horn.performed += OnHornPressed;
         shipInputActions.Ship.Dock.performed += OnDockPressed;
         shipInputActions.Ship.ToggleView.performed += OnViewToggled;
-        shipInputActions.Ship.TooglePanel.performed += OnPanelToggled;
+        shipInputActions.Ship.RequestParkingArea.performed += ParkingAreaRequested;
+        //shipInputActions.Ship.TooglePanel.performed += OnPanelToggled;
         shipInputActions.Ship.Horn.Enable();
         shipInputActions.Ship.Dock.Enable();
         shipInputActions.Ship.ToggleView.Enable();
-        shipInputActions.Ship.TooglePanel.Enable();
+        shipInputActions.Ship.RequestParkingArea.Enable();
+        //shipInputActions.Ship.TooglePanel.Enable();
     }
 
     private void OnHornPressed(InputAction.CallbackContext obj)
@@ -46,6 +49,7 @@ public class PlayerInputController : MonoBehaviour
     private void OnViewToggled(InputAction.CallbackContext obj)
     {
         Debug.Log("View toggled");
+        SceneManager.LoadScene(0);
         viewToggled.Raise();
     }
     private void OnPanelToggled(InputAction.CallbackContext obj)
@@ -61,12 +65,20 @@ public class PlayerInputController : MonoBehaviour
         shipInputActions.Ship.Horn.performed -= OnHornPressed;
         shipInputActions.Ship.Dock.performed -= OnDockPressed;
         shipInputActions.Ship.ToggleView.performed -= OnViewToggled;
-        shipInputActions.Ship.TooglePanel.performed -= OnPanelToggled;
+        shipInputActions.Ship.RequestParkingArea.performed -= ParkingAreaRequested;
+        //shipInputActions.Ship.TooglePanel.performed -= OnPanelToggled;
         shipInputActions.Ship.Horn.Disable();
         shipInputActions.Ship.Dock.Disable();
         shipInputActions.Ship.ToggleView.Disable();
-        shipInputActions.Ship.TooglePanel.Disable();
+        shipInputActions.Ship.RequestParkingArea.Disable();
+        //shipInputActions.Ship.TooglePanel.Disable();
     }
+
+    private void ParkingAreaRequested(InputAction.CallbackContext obj)
+    {
+        requestParkingArea.Raise();
+    }
+
     private void FixedUpdate()
     {
         linearInput.Value = linearMovementAction.ReadValue<Vector2>().y;

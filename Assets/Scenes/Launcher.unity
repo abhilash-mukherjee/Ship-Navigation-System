@@ -4354,9 +4354,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96af3593d4a7ce8429544de092461723, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxPlayersPerRoom: 4
-  Operator: OPERATOR
-  Salior: SAILOR
+  operatorScene: 1
+  sailorScene: 2
 --- !u!4 &1227826552
 Transform:
   m_ObjectHideFlags: 0

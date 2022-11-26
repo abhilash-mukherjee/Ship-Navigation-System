@@ -34,4 +34,3 @@ public class PathInstructionDisplayer : MonoBehaviour
         m_nextMilestone = pathManager.NextMileStone;
     }
 }
- 

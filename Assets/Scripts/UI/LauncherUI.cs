@@ -10,19 +10,19 @@ public class LauncherUI : MonoBehaviour
     private GameObject progressLabel;
     private void Start()
     {
-        progressLabel.SetActive(true);
-        controlPanel.SetActive(false);
+        progressLabel.SetActive(false);
+        controlPanel.SetActive(true);
 
     }
 
-    private void OnEnable()
-    {
-        Launcher.OnLobbyJoined += OnLobbyJoined;
-    }
-    private void OnDisable()
-    {
-        Launcher.OnLobbyJoined -= OnLobbyJoined;
-    }
+    //private void OnEnable()
+    //{
+    //    Launcher.OnLobbyJoined += OnLobbyJoined;
+    //}
+    //private void OnDisable()
+    //{
+    //    Launcher.OnLobbyJoined -= OnLobbyJoined;
+    //}
 
     private void OnLobbyJoined()
     {

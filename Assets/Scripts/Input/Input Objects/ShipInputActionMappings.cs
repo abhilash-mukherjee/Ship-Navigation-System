@@ -80,6 +80,15 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RequestParkingArea"",
+                    ""type"": ""Button"",
+                    ""id"": ""9c5219f1-a860-4191-866a-637d1585a6f0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -324,6 +333,28 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                     ""action"": ""TooglePanel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""933ec922-b56f-4064-b384-0206e4044dca"",
+                    ""path"": ""<Keyboard>/#(T)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RequestParkingArea"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b1300992-1320-4af5-b50e-5d07ee4d687e"",
+                    ""path"": ""<OculusTouchController>/triggerPressed"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RequestParkingArea"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -338,6 +369,7 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
         m_Ship_Dock = m_Ship.FindAction("Dock", throwIfNotFound: true);
         m_Ship_ToggleView = m_Ship.FindAction("ToggleView", throwIfNotFound: true);
         m_Ship_TooglePanel = m_Ship.FindAction("TooglePanel", throwIfNotFound: true);
+        m_Ship_RequestParkingArea = m_Ship.FindAction("RequestParkingArea", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -403,6 +435,7 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
     private readonly InputAction m_Ship_Dock;
     private readonly InputAction m_Ship_ToggleView;
     private readonly InputAction m_Ship_TooglePanel;
+    private readonly InputAction m_Ship_RequestParkingArea;
     public struct ShipActions
     {
         private @ShipInputActionMappings m_Wrapper;
@@ -413,6 +446,7 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
         public InputAction @Dock => m_Wrapper.m_Ship_Dock;
         public InputAction @ToggleView => m_Wrapper.m_Ship_ToggleView;
         public InputAction @TooglePanel => m_Wrapper.m_Ship_TooglePanel;
+        public InputAction @RequestParkingArea => m_Wrapper.m_Ship_RequestParkingArea;
         public InputActionMap Get() { return m_Wrapper.m_Ship; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -440,6 +474,9 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                 @TooglePanel.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnTooglePanel;
                 @TooglePanel.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnTooglePanel;
                 @TooglePanel.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnTooglePanel;
+                @RequestParkingArea.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnRequestParkingArea;
+                @RequestParkingArea.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnRequestParkingArea;
+                @RequestParkingArea.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnRequestParkingArea;
             }
             m_Wrapper.m_ShipActionsCallbackInterface = instance;
             if (instance != null)
@@ -462,6 +499,9 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                 @TooglePanel.started += instance.OnTooglePanel;
                 @TooglePanel.performed += instance.OnTooglePanel;
                 @TooglePanel.canceled += instance.OnTooglePanel;
+                @RequestParkingArea.started += instance.OnRequestParkingArea;
+                @RequestParkingArea.performed += instance.OnRequestParkingArea;
+                @RequestParkingArea.canceled += instance.OnRequestParkingArea;
             }
         }
     }
@@ -474,5 +514,6 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
         void OnDock(InputAction.CallbackContext context);
         void OnToggleView(InputAction.CallbackContext context);
         void OnTooglePanel(InputAction.CallbackContext context);
+        void OnRequestParkingArea(InputAction.CallbackContext context);
     }
 }

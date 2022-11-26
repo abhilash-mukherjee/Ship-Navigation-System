@@ -7,6 +7,7 @@ public class ParkingArea : MonoBehaviour
     public static event ParkingAreaEnterExitManager OnParkingEntered, OnParkingLeft;
     //[SerializeField] private TMPro.TextMeshProUGUI parkingText;
     [SerializeField] GameEvent OnParkingAreaReached, OnParkingAreaLeft;
+    [SerializeField] private ElementID parkingID;
     [SerializeField] private ShipModeName navigatingMode, parkingMode, dockedMode;
     [SerializeField] private ShipModeNameContainer currentMode;
     [SerializeField] GameEvent OnModeChanged;
@@ -15,8 +16,10 @@ public class ParkingArea : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         var modeManager = other.GetComponent<ShipModeManager>();
-        if(modeManager != null)
+        var pathManager = other.GetComponent<ShipPathManager>();
+        if(modeManager != null && pathManager != null)
         {
+            if (pathManager.CurrentParkingArea != parkingID) return;
             if (m_isInsideParking) return;
             currentMode.ModeName = parkingMode;
             OnModeChanged.Raise();

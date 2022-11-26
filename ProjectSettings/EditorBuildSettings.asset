@@ -9,8 +9,11 @@ EditorBuildSettings:
     path: Assets/Scenes/Launcher.unity
     guid: d674f3bea59169f428423d6c4a710d2f
   - enabled: 1
-    path: Assets/Scenes/Room for 1.unity
-    guid: 11cbc843d5298a54abda41c80f3371cf
+    path: Assets/Scenes/Operator.unity
+    guid: 64931ab0904b82f47a245b78a89720ac
+  - enabled: 1
+    path: Assets/Scenes/Sailor.unity
+    guid: 6211f9fb30bbb5f408bd3b66705d1a42
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 201c2adba812b78499fd26e0572fafd8,
       type: 2}
