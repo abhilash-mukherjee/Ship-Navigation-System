@@ -5,7 +5,7 @@ public class ParkingArea : MonoBehaviour
 {
     public delegate void ParkingAreaEnterExitManager(ParkingArea parkingArea);
     public static event ParkingAreaEnterExitManager OnParkingEntered, OnParkingLeft;
-    [SerializeField] private TMPro.TextMeshProUGUI parkingText;
+    //[SerializeField] private TMPro.TextMeshProUGUI parkingText;
     [SerializeField] GameEvent OnParkingAreaReached, OnParkingAreaLeft;
     [SerializeField] private ShipModeName navigatingMode, parkingMode, dockedMode;
     [SerializeField] private ShipModeNameContainer currentMode;
@@ -21,7 +21,7 @@ public class ParkingArea : MonoBehaviour
             currentMode.ModeName = parkingMode;
             OnModeChanged.Raise();
             m_isInsideParking = true;
-            parkingText.text = "Parking Area Reached";
+            //parkingText.text = "Parking Area Reached";
             OnParkingAreaReached.Raise();
             OnParkingEntered?.Invoke(this);
         }
@@ -36,7 +36,7 @@ public class ParkingArea : MonoBehaviour
             currentMode.ModeName = navigatingMode;
             OnModeChanged.Raise();
             m_isInsideParking = false;
-            parkingText.text = "Parking Area Left";
+            //parkingText.text = "Parking Area Left";
             OnParkingAreaLeft.Raise();
             OnParkingLeft?.Invoke(this);
 

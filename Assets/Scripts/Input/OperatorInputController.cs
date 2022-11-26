@@ -4,27 +4,27 @@ using UnityEngine.InputSystem;
 
 public class OperatorInputController : MonoBehaviour
 {
-    private OperatorInputActionMappings shipInputActions;
-    private InputAction linearMovementAction, steerMovementAction;
-    [SerializeField] private SteerInput steerInput;
-    [SerializeField] private LinearInput linearInput;
+    private OperatorInputActionMappings operatorInputActions;
+    //private InputAction linearMovementAction, steerMovementAction;
+    //[SerializeField] private SteerInput steerInput;
+    //[SerializeField] private LinearInput linearInput;
     [SerializeField] GameEvent VRScreenToggled, viewToggled, parkingAreaSelected;
     private void Awake()
     {
-        shipInputActions = new OperatorInputActionMappings();
+        operatorInputActions = new OperatorInputActionMappings();
     }
     private void OnEnable()
     {
-        linearMovementAction = shipInputActions.Operator.LinearMovement;
-        steerMovementAction = shipInputActions.Operator.Steer;
-        linearMovementAction.Enable();
-        steerMovementAction.Enable();
-        shipInputActions.Operator.ToggleView.performed += OnViewToggled;
-        shipInputActions.Operator.SelectParkingArea.performed += OnParkingAreaSelected;
-        shipInputActions.Operator.ToogleVRScreen.performed += OnVRScreenToggled;
-        shipInputActions.Operator.ToggleView.Enable();
-        shipInputActions.Operator.ToogleVRScreen.Enable();
-        shipInputActions.Operator.SelectParkingArea.Enable();
+        //linearMovementAction = operatorInputActions.Operator.LinearMovement;
+        //steerMovementAction = operatorInputActions.Operator.Steer;
+        //linearMovementAction.Enable();
+        //steerMovementAction.Enable();
+        operatorInputActions.Operator.ToggleView.performed += OnViewToggled;
+        operatorInputActions.Operator.SelectParkingArea.performed += OnParkingAreaSelected;
+        operatorInputActions.Operator.ToogleVRScreen.performed += OnVRScreenToggled;
+        operatorInputActions.Operator.ToggleView.Enable();
+        operatorInputActions.Operator.ToogleVRScreen.Enable();
+        operatorInputActions.Operator.SelectParkingArea.Enable();
     }
 
     
@@ -41,14 +41,14 @@ public class OperatorInputController : MonoBehaviour
 
     private void OnDisable()
     {
-        linearMovementAction.Disable();
-        steerMovementAction.Disable();
-        shipInputActions.Operator.ToggleView.performed -= OnViewToggled;
-        shipInputActions.Operator.ToogleVRScreen.performed -= OnVRScreenToggled;
-        shipInputActions.Operator.SelectParkingArea.performed -= OnParkingAreaSelected;
-        shipInputActions.Operator.ToggleView.Disable();
-        shipInputActions.Operator.ToogleVRScreen.Disable();
-        shipInputActions.Operator.SelectParkingArea.Disable();
+        //linearMovementAction.Disable();
+        //steerMovementAction.Disable();
+        operatorInputActions.Operator.ToggleView.performed -= OnViewToggled;
+        operatorInputActions.Operator.ToogleVRScreen.performed -= OnVRScreenToggled;
+        operatorInputActions.Operator.SelectParkingArea.performed -= OnParkingAreaSelected;
+        operatorInputActions.Operator.ToggleView.Disable();
+        operatorInputActions.Operator.ToogleVRScreen.Disable();
+        operatorInputActions.Operator.SelectParkingArea.Disable();
     }
 
     private void OnVRScreenToggled(InputAction.CallbackContext obj)
@@ -57,9 +57,9 @@ public class OperatorInputController : MonoBehaviour
         VRScreenToggled.Raise();
     }
 
-    private void FixedUpdate()
-    {
-        linearInput.Value = linearMovementAction.ReadValue<Vector2>().y;
-        steerInput.Value = linearInput.Value >= 0 ? steerMovementAction.ReadValue<Vector2>().x : -steerMovementAction.ReadValue<Vector2>().x;
-    }
+    //private void FixedUpdate()
+    //{
+    //    linearInput.Value = linearMovementAction.ReadValue<Vector2>().y;
+    //    steerInput.Value = linearInput.Value >= 0 ? steerMovementAction.ReadValue<Vector2>().x : -steerMovementAction.ReadValue<Vector2>().x;
+    //}
 }

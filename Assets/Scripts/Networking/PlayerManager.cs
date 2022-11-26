@@ -17,13 +17,6 @@ using System.Collections;
         public static GameObject LocalPlayerInstance;
         #endregion
 
-        #region Private Fields
-
-        [Tooltip("The Input Script")]
-        [SerializeField]
-        private GameObject playerInputModule;
-
-        #endregion
 
         #region MonoBehaviour CallBacks
 
@@ -41,21 +34,8 @@ using System.Collections;
 
         }
 
-        void Start()
-        {
-            if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
-            {
-                playerInputModule.SetActive(false);
-            }
-
-        }
-
 
 
         #endregion
 
-        #region Custom
-
-
-        #endregion
     }

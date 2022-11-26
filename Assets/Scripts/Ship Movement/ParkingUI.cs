@@ -5,25 +5,29 @@ using UnityEngine;
 
 public class ParkingUI : MonoBehaviour
 {
-    [SerializeField] private GameObject glow;
+    [SerializeField] private GameObject active,inActive;
     [SerializeField] private ElementID ID;
     static ParkingUI selectedParking;
     private void OnEnable()
     {
         ParkingAreaSelector.OnAreaSelected += AddGlow;
+        active.SetActive(false);
+        inActive.SetActive(true);
     }
 
     private void AddGlow(ElementID ID)
     {
         if (ID != this.ID) return;
         if(selectedParking != null) selectedParking.RemoveGlow();
-        glow.SetActive(true);
+        active.SetActive(true);
+        inActive.SetActive(false);
         selectedParking = this;
     }
 
     private void RemoveGlow()
     {
-        glow.SetActive(false);
+        active.SetActive(false);
+        inActive.SetActive(true);
     }
 
     private void OnDisable()
