@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class OperatorInputController : MonoBehaviour
 {
@@ -30,6 +31,7 @@ public class OperatorInputController : MonoBehaviour
     
     private void OnViewToggled(InputAction.CallbackContext obj)
     {
+        SceneManager.LoadScene(0);
         Debug.Log("View toggled");
         viewToggled.Raise();
     }
