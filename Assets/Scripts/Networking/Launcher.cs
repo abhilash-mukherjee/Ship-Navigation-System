@@ -78,7 +78,7 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
     public void Connect()
     {
-        if (ClientSideData.Instance.View == "Operator") SceneManager.LoadScene(operatorScene);
+        if (ClientSideData.Instance.View == "OPERATOR") SceneManager.LoadScene(operatorScene);
        else SceneManager.LoadScene(sailorScene);
     }
 
